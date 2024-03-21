@@ -1,0 +1,76 @@
+﻿@model IEnumerable<PizzaOrderPortal.Models.PizzaModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .pizza-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .card-body {
+        border: 1.5px inset violet;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: khaki;
+        box-shadow: 0 4px 8px rgba(21, 14, 12, 0.4);
+        text-align: center;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        .card-body:hover {
+            box-shadow: 0 8px 16px rgb(0 0 255);
+        }
+
+    input[type="search"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        box-sizing: border-box;
+        font-weight: 700;
+        color: blue;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        input[type="search"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+</style>
+
+<h2>Pizza Menu</h2>
+<div class="search-bar">
+    <form method="get" action="@Url.Action("Index")" id="searchForm">
+        <input type="search" placeholder="Search Item..." name="item" id="searchInput" onkeypress="return enterKeySubmit(event)" />
+    </form>
+</div>
+
+@if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+{
+    <p>Search Results for: @ViewBag.SearchTerm</p>
+}
+
+<div class="pizza-container">
+    @foreach (var item in Model)
+    {
+        <div class="card-body">
+            <a href="@Url.Action("SelectedItem", new { Id = item.Id })" style="text-decoration: none; color: inherit;">
+                <h5 class="card-title" style="font-size: 24px; color: blue;">@Html.DisplayFor(modelItem => item.Type)</h5>
+                <p class="card-text" style="font-size: 15px; color: darkred;">Rs.@Html.DisplayFor(modelItem => item.Price)</p>
+            </a>
+        </div>
+    }
+</div>
+
+<script>
+    function enterKeySubmit(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            document.getElementById('searchForm').submit();
+        }
+    }
+</script>
